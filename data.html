@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CityDB — Travel Safety Intelligence Dataset</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0d0b;
+    --bg2: #1a1612;
+    --bg3: #221e18;
+    --coral: #e07a5f;
+    --coral-dark: #c96a52;
+    --text: #f0ebe4;
+    --muted: #8a7f74;
+    --border: #2e2820;
+    --green: #4a9d6b;
+    --radius: 14px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--coral); }
+  .nav-demo {
+    font-size: 14px;
+    color: var(--muted);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .nav-demo:hover { color: var(--text); border-color: var(--muted); }
+
+  /* ── HERO ── */
+  .hero {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 100px 24px 60px;
+    text-align: center;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--coral);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 60px);
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+  .hero h1 span { color: var(--coral); }
+  .hero p {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 560px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--coral);
+    color: white;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 14px 28px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--coral-dark); }
+  .btn-secondary {
+    background: var(--bg3);
+    color: var(--text);
+    font-weight: 500;
+    font-size: 15px;
+    padding: 14px 28px;
+    border-radius: 10px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--muted); }
+
+  /* ── STATS BAR ── */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+  }
+  .stat {
+    flex: 1;
+    max-width: 200px;
+    text-align: center;
+    padding: 32px 20px;
+    border-right: 1px solid var(--border);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-num {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--coral);
+    letter-spacing: -1px;
+    display: block;
+  }
+  .stat-label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 24px;
+  }
+  .section-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 16px;
+  }
+  h2 {
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 700;
+    letter-spacing: -0.8px;
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 16px;
+    color: var(--muted);
+    margin-bottom: 48px;
+    max-width: 560px;
+  }
+
+  /* ── SCHEMA PREVIEW ── */
+  .schema-wrap {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .schema-bar {
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .schema-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+  .schema-bar span {
+    font-size: 12px;
+    color: var(--muted);
+    margin-left: 8px;
+    font-family: 'Courier Prime', monospace;
+  }
+  pre {
+    font-family: 'Courier Prime', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    padding: 24px;
+    overflow-x: auto;
+    color: #c8bfb0;
+  }
+  .k { color: #8ab4f8; }
+  .s { color: #a8d5a2; }
+  .c { color: #6a5f50; font-style: italic; }
+  .co { color: var(--coral); }
+
+  /* ── FIELDS GRID ── */
+  .fields-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 32px;
+  }
+  .field-tag {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+  .field-tag strong {
+    display: block;
+    color: var(--coral);
+    font-family: 'Courier Prime', monospace;
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+  .field-tag span { color: var(--muted); font-size: 12px; }
+
+  /* ── PRICING ── */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .plan {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    position: relative;
+  }
+  .plan.featured {
+    border-color: var(--coral);
+    background: #1e1410;
+  }
+  .plan-badge {
+    position: absolute;
+    top: -12px;
+    left: 24px;
+    background: var(--coral);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+  .plan-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .plan-price {
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .plan-price small {
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--muted);
+  }
+  .plan-period {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .plan-features {
+    list-style: none;
+    margin-bottom: 32px;
+  }
+  .plan-features li {
+    font-size: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .plan-features li:last-child { border-bottom: none; }
+  .plan-features li::before {
+    content: '✓';
+    color: var(--green);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .plan-features li.no::before { content: '–'; color: var(--muted); }
+  .plan-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .plan-btn-outline {
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .plan-btn-outline:hover { border-color: var(--muted); }
+  .plan-btn-fill {
+    background: var(--coral);
+    color: white;
+  }
+  .plan-btn-fill:hover { background: var(--coral-dark); }
+
+  /* ── USE CASES ── */
+  .use-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .use-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+  .use-icon { font-size: 28px; margin-bottom: 12px; }
+  .use-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  .use-card p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* ── CTA ── */
+  .cta {
+    text-align: center;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 80px 24px;
+  }
+  .cta h2 { margin-bottom: 16px; }
+  .cta p { color: var(--muted); font-size: 16px; margin-bottom: 32px; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 32px;
+    color: var(--muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+  }
+  footer a { color: var(--muted); }
+
+  @media (max-width: 600px) {
+    nav { padding: 16px 20px; }
+    .stats { flex-wrap: wrap; }
+    .stat { min-width: 50%; border-right: none; border-bottom: 1px solid var(--border); }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">City<span>DB</span></a>
+  <a href="https://damc-979.github.io/helpinghand" class="nav-demo">Live Demo →</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Travel Safety Intelligence Dataset</div>
+  <h1>The city data<br>no one else <span>sells cheaply</span></h1>
+  <p>100 cities. Consulates in 10 languages. Hospitals, scams, no-go zones, transport, culture — structured, normalized, ready to ship.</p>
+  <div class="hero-actions">
+    <a href="mailto:Mystudyglas@proton.me?subject=CityDB Developer License" class="btn-primary">Get the Dataset</a>
+    <a href="https://damc-979.github.io/helpinghand" class="btn-secondary">See it live →</a>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><span class="stat-num">100</span><span class="stat-label">Cities covered</span></div>
+  <div class="stat"><span class="stat-num">10</span><span class="stat-label">Consulate languages</span></div>
+  <div class="stat"><span class="stat-num">30+</span><span class="stat-label">Fields per city</span></div>
+  <div class="stat"><span class="stat-num">0</span><span class="stat-label">External API calls</span></div>
+</div>
+
+<!-- SCHEMA -->
+<section>
+  <div class="section-label">Schema</div>
+  <h2>One consistent structure.<br>Every city.</h2>
+  <p class="section-sub">No scraping surprises. No inconsistent formats. Every entry follows the same schema — drop it in and it works.</p>
+
+  <div class="schema-wrap">
+    <div class="schema-bar">
+      <div class="schema-dot"></div>
+      <div class="schema-dot"></div>
+      <div class="schema-dot"></div>
+      <span>citydb.js — sample entry</span>
+    </div>
+<pre><span class="c">// Every city follows this exact structure</span>
+<span class="s">"JP-tokyo"</span>: {
+  <span class="k">country</span>: <span class="s">"JP"</span>,
+  <span class="k">consulate</span>: {
+    <span class="k">en</span>: { <span class="k">name</span>: <span class="s">"U.S. Embassy Tokyo"</span>, <span class="k">address</span>: <span class="s">"1-10-5 Akasaka, Minato-ku"</span>, <span class="k">tel</span>: <span class="s">"+81 3 3224 5000"</span> },
+    <span class="k">de</span>: { <span class="k">name</span>: <span class="s">"Deutsche Botschaft Tokio"</span>, <span class="k">address</span>: <span class="s">"4-5-10 Minami-Azabu"</span>, <span class="k">tel</span>: <span class="s">"+81 3 5791 7700"</span> },
+    <span class="c">// + fr, hr, it, es, hi, ar, zh, ja</span>
+  },
+  <span class="k">hospital</span>: { <span class="k">name</span>: <span class="s">"St. Luke's International Hospital"</span>, <span class="k">tel</span>: <span class="s">"+81 3 5550 7166"</span> },
+  <span class="k">scams</span>: [
+    <span class="s">"Taxi overcharging from Narita: use only metered taxis from official ranks..."</span>,
+    <span class="s">"Hostess bar drag: staff invite tourists, bill arrives in thousands of USD..."</span>
+  ],
+  <span class="k">no_go</span>: [ <span class="s">"Kabukicho after 02:00 — aggressive touts near adult venues"</span> ],
+  <span class="k">top_food</span>: [ <span class="s">"Ramen"</span>, <span class="s">"Sushi"</span>, <span class="s">"Yakitori"</span>, <span class="s">"Tonkatsu"</span>, <span class="s">"Tempura"</span> ],
+  <span class="co">// ... 25 more fields</span>
+}</pre>
+  </div>
+
+  <div class="fields-grid">
+    <div class="field-tag"><strong>consulate</strong><span>10 languages, full address + phone</span></div>
+    <div class="field-tag"><strong>hospital</strong><span>Emergency hospital with contact</span></div>
+    <div class="field-tag"><strong>police_main</strong><span>Main police HQ address</span></div>
+    <div class="field-tag"><strong>airport</strong><span>IATA code, distance, phone</span></div>
+    <div class="field-tag"><strong>pharmacy_24h</strong><span>24h pharmacy location</span></div>
+    <div class="field-tag"><strong>dentist_24h</strong><span>Emergency dental contact</span></div>
+    <div class="field-tag"><strong>vet_emergency</strong><span>Emergency vet clinic</span></div>
+    <div class="field-tag"><strong>taxi</strong><span>Official taxi number + app</span></div>
+    <div class="field-tag"><strong>scams</strong><span>Described with how-to-avoid</span></div>
+    <div class="field-tag"><strong>no_go</strong><span>Zones with time-of-day context</span></div>
+    <div class="field-tag"><strong>special_zones</strong><span>Rules, permits, dress codes</span></div>
+    <div class="field-tag"><strong>drinking_water</strong><span>Tap safety per city</span></div>
+    <div class="field-tag"><strong>conduct_rules</strong><span>Local laws tourists break</span></div>
+    <div class="field-tag"><strong>speed_limits</strong><span>Urban / rural / highway</span></div>
+    <div class="field-tag"><strong>top_food</strong><span>5 dishes per city</span></div>
+    <div class="field-tag"><strong>top_attraction</strong><span>5 attractions with context</span></div>
+    <div class="field-tag"><strong>famous_company</strong><span>Major employers / brands</span></div>
+    <div class="field-tag"><strong>public_transport</strong><span>How to actually get around</span></div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section style="padding-top:0">
+  <div class="section-label">Who uses this</div>
+  <h2>Built for developers<br>who ship travel products</h2>
+  <p class="section-sub">One file. Drop it in. Works offline. No rate limits, no API keys, no monthly bills.</p>
+  <div class="use-grid">
+    <div class="use-card">
+      <div class="use-icon">✈️</div>
+      <h3>Travel apps</h3>
+      <p>Safety info, local intel, emergency contacts — ready for any city in your DB.</p>
+    </div>
+    <div class="use-card">
+      <div class="use-icon">🏢</div>
+      <h3>Corporate travel</h3>
+      <p>Duty-of-care platforms need exactly this: structured risk data per destination.</p>
+    </div>
+    <div class="use-card">
+      <div class="use-icon">🛡️</div>
+      <h3>Travel insurance</h3>
+      <p>Hospital locations, emergency numbers, scam risk — inputs for underwriting logic.</p>
+    </div>
+    <div class="use-card">
+      <div class="use-icon">📰</div>
+      <h3>Travel media</h3>
+      <p>Blogs and booking sites can embed safety widgets powered by the dataset.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section>
+  <div class="section-label">Pricing</div>
+  <h2>Simple. One-time.<br>No subscriptions to start.</h2>
+  <p class="section-sub">Try the data free. Pay once for the full set. Contact for commercial use.</p>
+  <div class="pricing-grid">
+
+    <div class="plan">
+      <div class="plan-name">Sample</div>
+      <div class="plan-price">€0</div>
+      <div class="plan-period">Free, no sign-up</div>
+      <ul class="plan-features">
+        <li>5 cities (JSON)</li>
+        <li>Full schema included</li>
+        <li class="no">All 100 cities</li>
+        <li class="no">Future updates</li>
+        <li class="no">Email support</li>
+      </ul>
+      <a href=11?subject=CityDB Free Sample" class="plan-btn plan-btn-outline">Get sample</a>
+    </div>
+
+    <div class="plan featured">
+      <div class="plan-badge">Most popular</div>
+      <div class="plan-name">Developer</div>
+      <div class="plan-price">€49<small> one-time</small></div>
+      <div class="plan-period">Full dataset, yours forever</div>
+      <ul class="plan-features">
+        <li>All 100 cities (JS + JSON)</li>
+        <li>Full schema + docs</li>
+        <li>One-time payment</li>
+        <li>Use in one product</li>
+        <li class="no">Future updates</li>
+      </ul>
+      <a href="mailto:Mystudyglas@proton.me?subject=CityDB Developer License" class="plan-btn plan-btn-fill">Buy now</a>
+    </div>
+
+    <div class="plan">
+      <div class="plan-name">Commercial</div>
+      <div class="plan-price">€149<small>/6mo</small></div>
+      <div class="plan-period">Updates + support included</div>
+      <ul class="plan-features">
+        <li>All 100 cities (JS + JSON)</li>
+        <li>6-month data updates</li>
+        <li>Unlimited products</li>
+        <li>Email support</li>
+        <li>Early access to new cities</li>
+      </ul>
+      <a href="mailto:Mystudyglas@proton.me?subject=CityDB Commercial License" class="plan-btn plan-btn-outline">Contact us</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta">
+  <h2>See it working right now</h2>
+  <p>HelpingHand is the live demo — built entirely on CityDB. Search any of the 100 cities.</p>
+  <a href="https://damc-979.github.io/helpinghand" class="btn-primary">Open HelpingHand →</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>CityDB is curated by hand. Data is updated regularly. Not scraped — researched.</p>
+  <p style="margin-top:8px"><a href="mailto:Mystudyglas@proton.me">Mystudyglas@proton.me</a></p>
+</footer>
+
+</body>
+</html>
