@@ -1,512 +1,566 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="HelpingHand — free travel safety app. Emergency numbers, first aid, evacuation guides. Works offline." />
-    <title>HelpingHand — Travel Safety</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CityDB — Travel Safety Intelligence Dataset</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        :root {
-            --coral:   #e07a5f;
-            --cream:   #faf6f0;
-            --ink:     #3a2e22;
-            --muted:   #7a6a5a;
-            --border:  #e8ddd0;
-            --card-bg: #ffffff;
-        }
+  :root {
+    --bg: #0f0d0b;
+    --bg2: #1a1612;
+    --bg3: #221e18;
+    --coral: #e07a5f;
+    --coral-dark: #c96a52;
+    --text: #f0ebe4;
+    --muted: #8a7f74;
+    --border: #2e2820;
+    --green: #4a9d6b;
+    --radius: 14px;
+  }
 
-        body {
-            font-family: "DM Sans", sans-serif;
-            background: var(--cream);
-            color: var(--ink);
-            line-height: 1.6;
-        }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
 
-        a { color: var(--coral); text-decoration: none; }
-        a:hover { text-decoration: underline; }
+  /* ── NAV ── */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--coral); }
+  .nav-demo {
+    font-size: 14px;
+    color: var(--muted);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .nav-demo:hover { color: var(--text); border-color: var(--muted); }
 
-        /* ── HEADER ── */
-        .lp-header {
-            background: var(--cream);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+  /* ── HERO ── */
+  .hero {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 100px 24px 60px;
+    text-align: center;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--coral);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 60px);
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+  .hero h1 span { color: var(--coral); }
+  .hero p {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 560px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--coral);
+    color: white;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 14px 28px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--coral-dark); }
+  .btn-secondary {
+    background: var(--bg3);
+    color: var(--text);
+    font-weight: 500;
+    font-size: 15px;
+    padding: 14px 28px;
+    border-radius: 10px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--muted); }
 
-        .lp-logo {
-            font-family: "Special Elite", cursive;
-            font-size: 1.3rem;
-            color: var(--ink);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+  /* ── STATS BAR ── */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+  }
+  .stat {
+    flex: 1;
+    max-width: 200px;
+    text-align: center;
+    padding: 32px 20px;
+    border-right: 1px solid var(--border);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-num {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--coral);
+    letter-spacing: -1px;
+    display: block;
+  }
+  .stat-label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
 
-        .lp-logo span { font-size: 1.5rem; }
+  /* ── SECTIONS ── */
+  section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 24px;
+  }
+  .section-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 16px;
+  }
+  h2 {
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 700;
+    letter-spacing: -0.8px;
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 16px;
+    color: var(--muted);
+    margin-bottom: 48px;
+    max-width: 560px;
+  }
 
-        .lp-nav-btn {
-            font-family: "Courier Prime", monospace;
-            font-size: 0.85rem;
-            padding: 0.5rem 1.2rem;
-            background: var(--coral);
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-        }
+  /* ── SCHEMA PREVIEW ── */
+  .schema-wrap {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .schema-bar {
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .schema-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+  .schema-bar span {
+    font-size: 12px;
+    color: var(--muted);
+    margin-left: 8px;
+    font-family: 'Courier Prime', monospace;
+  }
+  pre {
+    font-family: 'Courier Prime', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    padding: 24px;
+    overflow-x: auto;
+    color: #c8bfb0;
+  }
+  .k { color: #8ab4f8; }
+  .s { color: #a8d5a2; }
+  .c { color: #6a5f50; font-style: italic; }
+  .co { color: var(--coral); }
 
-        .lp-nav-btn:hover { opacity: 0.87; text-decoration: none; }
+  /* ── FIELDS GRID ── */
+  .fields-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 32px;
+  }
+  .field-tag {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+  .field-tag strong {
+    display: block;
+    color: var(--coral);
+    font-family: 'Courier Prime', monospace;
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+  .field-tag span { color: var(--muted); font-size: 12px; }
 
-        /* ── HERO ── */
-        .lp-hero {
-            max-width: 720px;
-            margin: 0 auto;
-            padding: 4rem 2rem 3rem;
-            text-align: center;
-        }
+  /* ── PRICING ── */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .plan {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    position: relative;
+  }
+  .plan.featured {
+    border-color: var(--coral);
+    background: #1e1410;
+  }
+  .plan-badge {
+    position: absolute;
+    top: -12px;
+    left: 24px;
+    background: var(--coral);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+  .plan-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .plan-price {
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .plan-price small {
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--muted);
+  }
+  .plan-period {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .plan-features {
+    list-style: none;
+    margin-bottom: 32px;
+  }
+  .plan-features li {
+    font-size: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .plan-features li:last-child { border-bottom: none; }
+  .plan-features li::before {
+    content: '✓';
+    color: var(--green);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .plan-features li.no::before { content: '–'; color: var(--muted); }
+  .plan-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .plan-btn-outline {
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .plan-btn-outline:hover { border-color: var(--muted); }
+  .plan-btn-fill {
+    background: var(--coral);
+    color: white;
+  }
+  .plan-btn-fill:hover { background: var(--coral-dark); }
 
-        .lp-hero-stamp {
-            font-family: "Courier Prime", monospace;
-            font-size: 0.72rem;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--coral);
-            margin-bottom: 1rem;
-        }
+  /* ── USE CASES ── */
+  .use-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .use-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+  .use-icon { font-size: 28px; margin-bottom: 12px; }
+  .use-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  .use-card p { font-size: 13px; color: var(--muted); line-height: 1.5; }
 
-        .lp-hero h1 {
-            font-family: "Special Elite", cursive;
-            font-size: clamp(2rem, 6vw, 3rem);
-            line-height: 1.2;
-            color: var(--ink);
-            margin-bottom: 1.2rem;
-        }
+  /* ── CTA ── */
+  .cta {
+    text-align: center;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 80px 24px;
+  }
+  .cta h2 { margin-bottom: 16px; }
+  .cta p { color: var(--muted); font-size: 16px; margin-bottom: 32px; }
 
-        .lp-hero p {
-            font-size: 1.1rem;
-            color: var(--muted);
-            max-width: 520px;
-            margin: 0 auto 2rem;
-        }
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 32px;
+    color: var(--muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+  }
+  footer a { color: var(--muted); }
 
-        .lp-hero-btns {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn-primary {
-            font-family: "Courier Prime", monospace;
-            font-size: 0.95rem;
-            padding: 0.75rem 2rem;
-            background: var(--coral);
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-primary:hover { opacity: 0.87; text-decoration: none; }
-
-        .btn-secondary {
-            font-family: "Courier Prime", monospace;
-            font-size: 0.95rem;
-            padding: 0.75rem 2rem;
-            background: transparent;
-            color: var(--ink);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-secondary:hover { border-color: var(--coral); color: var(--coral); text-decoration: none; }
-
-        /* ── OFFLINE BANNER ── */
-        .lp-offline-banner {
-            background: var(--ink);
-            color: var(--cream);
-            text-align: center;
-            padding: 1rem 2rem;
-            font-family: "Courier Prime", monospace;
-            font-size: 0.88rem;
-            letter-spacing: 0.04em;
-        }
-
-        .lp-offline-banner strong { color: var(--coral); }
-
-        /* ── SECTIONS ── */
-        .lp-section {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 3rem 2rem;
-        }
-
-        .lp-section-title {
-            font-family: "Special Elite", cursive;
-            font-size: 1.4rem;
-            color: var(--ink);
-            margin-bottom: 0.4rem;
-        }
-
-        .lp-section-sub {
-            font-family: "Courier Prime", monospace;
-            font-size: 0.78rem;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-bottom: 2rem;
-        }
-
-        /* ── FEATURE GRID ── */
-        .lp-features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.2rem;
-        }
-
-        .lp-feature-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 1.2rem;
-        }
-
-        .lp-feature-emoji {
-            font-size: 1.6rem;
-            margin-bottom: 0.6rem;
-            display: block;
-        }
-
-        .lp-feature-title {
-            font-family: "Special Elite", cursive;
-            font-size: 0.95rem;
-            color: var(--ink);
-            margin-bottom: 0.3rem;
-        }
-
-        .lp-feature-desc {
-            font-family: "Courier Prime", monospace;
-            font-size: 0.78rem;
-            color: var(--muted);
-            line-height: 1.5;
-        }
-
-        /* ── PAGES LIST ── */
-        .lp-pages {
-            display: flex;
-            flex-direction: column;
-            gap: 0.7rem;
-        }
-
-        .lp-page-row {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            padding: 0.9rem 1rem;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-        }
-
-        .lp-page-num {
-            font-family: "Courier Prime", monospace;
-            font-size: 0.72rem;
-            color: var(--coral);
-            font-weight: bold;
-            min-width: 24px;
-            padding-top: 2px;
-        }
-
-        .lp-page-name {
-            font-family: "Special Elite", cursive;
-            font-size: 0.95rem;
-            color: var(--ink);
-        }
-
-        .lp-page-desc {
-            font-family: "Courier Prime", monospace;
-            font-size: 0.76rem;
-            color: var(--muted);
-        }
-
-        /* ── SCREENSHOTS ── */
-        .lp-screenshots {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-        }
-
-        .lp-screenshot-slot {
-            border-radius: 6px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            background: var(--card-bg);
-        }
-
-        .lp-screenshot-slot img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .lp-screenshot-caption {
-            font-family: "Courier Prime", monospace;
-            font-size: 0.68rem;
-            color: var(--muted);
-            text-align: center;
-            padding: 0.4rem 0.5rem 0.5rem;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-        }
-
-        /* ── DIVIDER ── */
-        .lp-divider {
-            border: none;
-            border-top: 1px solid var(--border);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        /* ── FREE PANEL ── */
-        .lp-free {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 2rem;
-            text-align: center;
-            max-width: 520px;
-            margin: 0 auto;
-        }
-
-        .lp-free-title {
-            font-family: "Special Elite", cursive;
-            font-size: 1.3rem;
-            color: var(--ink);
-            margin-bottom: 0.8rem;
-        }
-
-        .lp-free-list {
-            list-style: none;
-            font-family: "Courier Prime", monospace;
-            font-size: 0.82rem;
-            color: var(--muted);
-            line-height: 2;
-            margin-bottom: 1.5rem;
-        }
-
-        .lp-free-list li::before { content: "✓  "; color: var(--coral); }
-
-        /* ── FOOTER ── */
-        .lp-footer {
-            border-top: 1px solid var(--border);
-            padding: 2rem;
-            text-align: center;
-            font-family: "Courier Prime", monospace;
-            font-size: 0.76rem;
-            color: var(--muted);
-            line-height: 1.8;
-        }
-
-        @media (max-width: 480px) {
-            .lp-header { padding: 1rem; }
-            .lp-hero { padding: 2.5rem 1rem 2rem; }
-            .lp-section { padding: 2rem 1rem; }
-        }
-    </style>
+  @media (max-width: 600px) {
+    nav { padding: 16px 20px; }
+    .stats { flex-wrap: wrap; }
+    .stat { min-width: 50%; border-right: none; border-bottom: 1px solid var(--border); }
+  }
+</style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header class="lp-header">
-    <div class="lp-logo"><span>✋</span> HelpingHand</div>
-    <a class="lp-nav-btn" href="https://damc-979.github.io/citydb/">Return to Data Demo</a>
-</header>
-
-<!-- OFFLINE BANNER -->
-<div class="lp-offline-banner">
-    <strong>Works offline.</strong> Save to your home screen before you travel — emergency guides and numbers are always there, no signal needed.
-</div>
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">City<span>DB</span></a>
+  <a href="demo.html" class="nav-demo">Live Demo →</a>
+</nav>
 
 <!-- HERO -->
-<section class="lp-hero">
-    <div class="lp-hero-stamp">Free · No login · No ads · No data collected</div>
-    <h1>Your safety companion.<br>Wherever you go.</h1>
-    <p>Emergency numbers for 100+ countries, first aid guides, evacuation protocols, international law — all in one app. Built for travelers, works without internet.</p>
-    <div class="lp-hero-btns">
-        <a class="btn-secondary" href="#features">See what's inside</a>
+<div class="hero">
+  <div class="hero-badge">Travel Safety Intelligence Dataset</div>
+  <h1>The city data no one else is publishing <br> enterprises hide<span>   travel apps are missing.</span></h1>
+  <p>Safety dataset built for developers. 100 cities. Zero API fees. All in one file.</p>
+  <div class="hero-actions">
+    <a href="citydb-sample.js" download="citydb-sample.js" class="btn-primary">Get the Dataset</a>
+    <a href="demo.html" class="btn-secondary">See it live →</a>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><span class="stat-num">100</span><span class="stat-label">Cities covered</span></div>
+  <div class="stat"><span class="stat-num">10</span><span class="stat-label">Consulate languages</span></div>
+  <div class="stat"><span class="stat-num">30+</span><span class="stat-label">Fields per city</span></div>
+  <div class="stat"><span class="stat-num">0</span><span class="stat-label">External API calls</span></div>
+</div>
+
+<!-- SCHEMA -->
+<section>
+  <div class="section-label">Schema</div>
+  <h2>One consistent structure.<br>Every city.</h2>
+  <p class="section-sub">No scraping surprises. No inconsistent formats. Every entry follows the same schema — drop it in and it works.</p>
+
+  <div class="schema-wrap">
+    <div class="schema-bar">
+      <div class="schema-dot"></div>
+      <div class="schema-dot"></div>
+      <div class="schema-dot"></div>
+      <span>citydb.js — sample entry</span>
     </div>
+<pre><span class="c">// Every city follows this exact structure</span>
+<span class="s">"JP-tokyo"</span>: {
+  <span class="k">country</span>: <span class="s">"JP"</span>,
+  <span class="k">consulate</span>: {
+    <span class="k">en</span>: { <span class="k">name</span>: <span class="s">"U.S. Embassy Tokyo"</span>, <span class="k">address</span>: <span class="s">"1-10-5 Akasaka, Minato-ku"</span>, <span class="k">tel</span>: <span class="s">"+81 3 3224 5000"</span> },
+    <span class="k">de</span>: { <span class="k">name</span>: <span class="s">"Deutsche Botschaft Tokio"</span>, <span class="k">address</span>: <span class="s">"4-5-10 Minami-Azabu"</span>, <span class="k">tel</span>: <span class="s">"+81 3 5791 7700"</span> },
+    <span class="c">// + fr, hr, it, es, hi, ar, zh, ja</span>
+  },
+  <span class="k">hospital</span>: { <span class="k">name</span>: <span class="s">"St. Luke's International Hospital"</span>, <span class="k">tel</span>: <span class="s">"+81 3 5550 7166"</span> },
+  <span class="k">scams</span>: [
+    <span class="s">"Taxi overcharging from Narita: use only metered taxis from official ranks..."</span>,
+    <span class="s">"Hostess bar drag: staff invite tourists, bill arrives in thousands of USD..."</span>
+  ],
+  <span class="k">no_go</span>: [ <span class="s">"Kabukicho after 02:00 — aggressive touts near adult venues"</span> ],
+  <span class="k">top_food</span>: [ <span class="s">"Ramen"</span>, <span class="s">"Sushi"</span>, <span class="s">"Yakitori"</span>, <span class="s">"Tonkatsu"</span>, <span class="s">"Tempura"</span> ],
+  <span class="co">// ... 25 more fields</span>
+}</pre>
+  </div>
+
+  <div class="fields-grid">
+    <div class="field-tag"><strong>consulate</strong><span>10 languages, full address + phone</span></div>
+    <div class="field-tag"><strong>hospital</strong><span>Emergency hospital with contact</span></div>
+    <div class="field-tag"><strong>police_main</strong><span>Main police HQ address</span></div>
+    <div class="field-tag"><strong>airport</strong><span>IATA code, distance, phone</span></div>
+    <div class="field-tag"><strong>pharmacy_24h</strong><span>24h pharmacy location</span></div>
+    <div class="field-tag"><strong>dentist_24h</strong><span>Emergency dental contact</span></div>
+    <div class="field-tag"><strong>vet_emergency</strong><span>Emergency vet clinic</span></div>
+    <div class="field-tag"><strong>taxi</strong><span>Official taxi number + app</span></div>
+    <div class="field-tag"><strong>scams</strong><span>Described with how-to-avoid</span></div>
+    <div class="field-tag"><strong>no_go</strong><span>Zones with time-of-day context</span></div>
+    <div class="field-tag"><strong>special_zones</strong><span>Rules, permits, dress codes</span></div>
+    <div class="field-tag"><strong>drinking_water</strong><span>Tap safety per city</span></div>
+    <div class="field-tag"><strong>conduct_rules</strong><span>Local laws tourists break</span></div>
+    <div class="field-tag"><strong>speed_limits</strong><span>Urban / rural / highway</span></div>
+    <div class="field-tag"><strong>top_food</strong><span>5 dishes per city</span></div>
+    <div class="field-tag"><strong>top_attraction</strong><span>5 attractions with context</span></div>
+    <div class="field-tag"><strong>famous_company</strong><span>Major employers / brands</span></div>
+    <div class="field-tag"><strong>public_transport</strong><span>How to actually get around</span></div>
+  </div>
 </section>
 
-<hr class="lp-divider" />
-
-<!-- FEATURES -->
-<section class="lp-section" id="features">
-    <div class="lp-section-title">Built for when things go wrong</div>
-    <div class="lp-section-sub">Key features</div>
-    <div class="lp-features">
-        <div class="lp-feature-card">
-            <span class="lp-feature-emoji">🚨</span>
-            <div class="lp-feature-title">Emergency Numbers</div>
-            <div class="lp-feature-desc">Police, ambulance, fire and coastguard for 100+ countries. Always available offline.</div>
-        </div>
-        <div class="lp-feature-card">
-            <span class="lp-feature-emoji">🔥</span>
-            <div class="lp-feature-title">Emergency Scenarios</div>
-            <div class="lp-feature-desc">14 step-by-step guides — fire, earthquake, flood, air raid, snakebite, choking and more.</div>
-        </div>
-        <div class="lp-feature-card">
-            <span class="lp-feature-emoji">🫀</span>
-            <div class="lp-feature-title">First Aid & CPR</div>
-            <div class="lp-feature-desc">CPR guide, pulse meter, meditation clock. Tools for the waiting room and beyond.</div>
-        </div>
-        <div class="lp-feature-card">
-            <span class="lp-feature-emoji">🌍</span>
-            <div class="lp-feature-title">City Intelligence</div>
-            <div class="lp-feature-desc">Hospitals, consulates, transport, no-go zones, conduct rules for 16 major cities.</div>
-        </div>
-        <div class="lp-feature-card">
-            <span class="lp-feature-emoji">⚖️</span>
-            <div class="lp-feature-title">International Law</div>
-            <div class="lp-feature-desc">Geneva Conventions, UDHR, Vienna Convention, Refugee rights — your legal reference abroad.</div>
-        </div>
-        <div class="lp-feature-card">
-            <span class="lp-feature-emoji">🌤️</span>
-            <div class="lp-feature-title">Live Conditions</div>
-            <div class="lp-feature-desc">Weather, air quality, earthquake alerts, exchange rates — for any city in the world.</div>
-        </div>
+<!-- USE CASES -->
+<section style="padding-top:0">
+  <div class="section-label">Who uses this</div>
+  <h2>Built for developers<br> regarding travel management</h2>
+  <p class="section-sub">One file. Drop it in. Works offline. No rate limits, no API keys, no monthly bills.</p>
+  <div class="use-grid">
+    <div class="use-card">
+      <div class="use-icon">✈️</div>
+      <h3>Travel apps</h3>
+      <p>Safety info, local intel, emergency contacts — ready for any city in your DB.</p>
     </div>
+    <div class="use-card">
+      <div class="use-icon">🏢</div>
+      <h3>Corporate travel</h3>
+      <p>Duty-of-care platforms need exactly this: structured risk data per destination.</p>
+    </div>
+    <div class="use-card">
+      <div class="use-icon">🛡️</div>
+      <h3>Travel insurance</h3>
+      <p>Hospital locations, emergency numbers, scam risk — inputs for underwriting logic.</p>
+    </div>
+    <div class="use-card">
+      <div class="use-icon">📰</div>
+      <h3>Travel media</h3>
+      <p>Blogs and booking sites can embed safety widgets powered by the dataset.</p>
+    </div>
+  </div>
 </section>
 
-<hr class="lp-divider" />
+<!-- PRICING -->
+<section>
+  <div class="section-label">Pricing</div>
+  <h2>Simple. One-time.<br>No subscriptions to start.</h2>
+  <p class="section-sub">Try the data free. Pay once for the full set. Contact for commercial use.</p>
+  <div class="pricing-grid">
 
-<!-- PAGES -->
-<section class="lp-section">
-    <div class="lp-section-title">Eight pages of information</div>
-    <div class="lp-section-sub">What's inside</div>
-    <div class="lp-pages">
-        <div class="lp-page-row">
-            <div class="lp-page-num">01</div>
-            <div>
-                <div class="lp-page-name">Strategic Risk</div>
-                <div class="lp-page-desc">Weather · Emergency numbers · Air quality · Earthquake alerts · Safety score</div>
-            </div>
-        </div>
-        <div class="lp-page-row">
-            <div class="lp-page-num">02</div>
-            <div>
-                <div class="lp-page-name">Practical Safety</div>
-                <div class="lp-page-desc">Consulate · Hospital · Transport · No-go zones · Conduct rules · Travel documents</div>
-            </div>
-        </div>
-        <div class="lp-page-row">
-            <div class="lp-page-num">03</div>
-            <div>
-                <div class="lp-page-name">People & Identity</div>
-                <div class="lp-page-desc">City facts · Culture · Food & drink · Attractions · Sport · Local media</div>
-            </div>
-        </div>
-        <div class="lp-page-row">
-            <div class="lp-page-num">04</div>
-            <div>
-                <div class="lp-page-name">Wellness & First Aid</div>
-                <div class="lp-page-desc">CPR guide · Pulse meter · Meditation clock · Stress quotes</div>
-            </div>
-        </div>
-        <div class="lp-page-row">
-            <div class="lp-page-num">05</div>
-            <div>
-                <div class="lp-page-name">International Law Library</div>
-                <div class="lp-page-desc">8 foundational legal documents — your rights anywhere in the world</div>
-            </div>
-        </div>
-        <div class="lp-page-row">
-            <div class="lp-page-num">06</div>
-            <div>
-                <div class="lp-page-name">City Map</div>
-                <div class="lp-page-desc">Interactive map · Hospital · Police · Airport · Consulate pins · Compass</div>
-            </div>
-        </div>
-        <div class="lp-page-row">
-            <div class="lp-page-num">07</div>
-            <div>
-                <div class="lp-page-name">Emergency Guide</div>
-                <div class="lp-page-desc">14 scenarios — fire, earthquake, flood, air raid, medical emergencies and more</div>
-            </div>
-        </div>
-        <div class="lp-page-row">
-            <div class="lp-page-num">08</div>
-            <div>
-                <div class="lp-page-name">Stressed While Waiting?</div>
-                <div class="lp-page-desc">Guess the Number · Guess the Capital · Trivia Challenge — 82 questions</div>
-            </div>
-        </div>
+    <div class="plan">
+      <div class="plan-name">Sample</div>
+      <div class="plan-price">€0</div>
+      <div class="plan-period">Free, no sign-up</div>
+      <ul class="plan-features">
+        <li>5 cities (JSON)</li>
+        <li>Full schema included</li>
+        <li class="no">All 100 cities</li>
+        <li class="no">Future updates</li>
+        <li class="no">Email support</li>
+      </ul>
+      <a href="citydb-sample.js" download="citydb-sample.js" class="plan-btn plan-btn-outline">Get sample</a>
     </div>
+
+    <div class="plan featured">
+      <div class="plan-badge">Most popular</div>
+      <div class="plan-name">Developer</div>
+      <div class="plan-price">€49<small> one-time</small></div>
+      <div class="plan-period">Full dataset, yours forever</div>
+      <ul class="plan-features">
+        <li>All 100 cities (JS + JSON)</li>
+        <li>Full schema + docs</li>
+        <li>One-time payment</li>
+        <li>Use in one product</li>
+        <li class="no">Future updates</li>
+      </ul>
+      <a href="mailto:Mystudyglas@proton.me?subject=CityDB Developer License" class="plan-btn plan-btn-fill">Buy now</a>
+    </div>
+
+    <div class="plan">
+      <div class="plan-name">Commercial</div>
+      <div class="plan-price">€149<small>/6mo</small></div>
+      <div class="plan-period">Updates + support included</div>
+      <ul class="plan-features">
+        <li>All 100 cities (JS + JSON)</li>
+        <li>6-month data updates</li>
+        <li>Unlimited products</li>
+        <li>Email support</li>
+        <li>Early access to new cities</li>
+      </ul>
+      <a href="mailto:Mystudyglas@proton.me?subject=CityDB Commercial License" class="plan-btn plan-btn-outline">Contact us</a>
+    </div>
+
+  </div>
 </section>
 
-<hr class="lp-divider" />
-
-<!-- SCREENSHOTS -->
-<section class="lp-section">
-    <div class="lp-section-title">See it in action</div>
-    <div class="lp-section-sub">Screenshots</div>
-    <div class="lp-screenshots">
-        <div class="lp-screenshot-slot">
-            <img src="Page1.jpg" alt="Page 1 — Strategic Risk" loading="lazy" />
-            <div class="lp-screenshot-caption">01 · Strategic Risk</div>
-        </div>
-        <div class="lp-screenshot-slot">
-            <img src="page2.jpg" alt="Page 2 — Practical Safety" loading="lazy" />
-            <div class="lp-screenshot-caption">02 · Practical Safety</div>
-        </div>
-        <div class="lp-screenshot-slot">
-            <img src="page3.jpg" alt="Page 3 — People &amp; Identity" loading="lazy" />
-            <div class="lp-screenshot-caption">03 · People &amp; Identity</div>
-        </div>
-        <div class="lp-screenshot-slot">
-            <img src="page4.jpg" alt="Page 4 — Wellness &amp; First Aid" loading="lazy" />
-            <div class="lp-screenshot-caption">04 · Wellness &amp; First Aid</div>
-        </div>
-        <div class="lp-screenshot-slot">
-            <img src="page 5.jpg" alt="Page 5 — International Law Library" loading="lazy" />
-            <div class="lp-screenshot-caption">05 · Law Library</div>
-        </div>
-        <div class="lp-screenshot-slot">
-            <img src="page6.jpg" alt="Page 6 — City Map" loading="lazy" />
-            <div class="lp-screenshot-caption">06 · City Map</div>
-        </div>
-        <div class="lp-screenshot-slot">
-            <img src="page 7.jpg" alt="Page 7 — Emergency Guide" loading="lazy" />
-            <div class="lp-screenshot-caption">07 · Emergency Guide</div>
-        </div>
-    </div>
-</section>
-
-<hr class="lp-divider" />
-
-
-<div style="text-align:right; max-width:800px; margin:0 auto; padding:0 2rem 1.5rem;">
-    <a class="lp-nav-btn" href="https://damc-979.github.io/citydb/">Return to Data Demo</a>
+<!-- CTA -->
+<div class="cta">
+  <h2>See how it works</h2>
+  <p>Live demo — 10 cities, full data. Or explore the complete HelpingHand app built on CityDB.</p>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <a href="demo.html" class="btn-primary">Open demo →</a>
+    <a href="https://damc-979.github.io/field-intel/" class="btn-secondary">See HelpingHand →</a>
+  </div>
 </div>
 
 <!-- FOOTER -->
-<footer class="lp-footer">
-    <p>HelpingHand — Travel Safety App</p>
-    <p>Designed &amp; developed by Danijel Milec · MyStudyglas.Incc</p>
-    <p style="margin-top:0.4rem; font-size:0.7rem;">Built with C (Claude Code) · For planning and peace of mind · Always verify critical information locally.</p>
+<footer>
+  <p>CityDB is curated by hand. Data is updated regularly. Not scraped — researched.</p>
+  <p style="margin-top:8px"><a href="mailto:Mystudyglas@proton.me">Mystudyglas@proton.me</a></p>
 </footer>
 
 </body>
